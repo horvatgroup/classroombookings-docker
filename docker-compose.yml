@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  crbs:
+    build: ./
+    container_name: crbs
+    restart: unless-stopped
+    volumes:
+      - app:/var/www/html/
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+  mariadb:
+    image: mariadb:10
+    container_name: crbs-mariadb
+    restart: unless-stopped
+    expose:
+      - 3306
+#    ports:
+#      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: securePassword123
+      MARIADB_DATABASE: crbs_db
+      MARIADB_USER: crbs_user
+      MARIADB_PASSWORD: 6vTccw7zYF
+    volumes:
+      - db:/var/lib/mysql 
+
+volumes:
+  db:
+  app:
