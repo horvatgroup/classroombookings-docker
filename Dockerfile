@@ -1,7 +1,7 @@
 FROM docker.io/library/php:7.3-fpm-alpine
 
 #Change version to trigger build
-ARG CRBS_VERSION=2.6.4
+ARG CRBS_VERSION=2.8.6
 
 WORKDIR /var/www/html
 
@@ -24,8 +24,11 @@ RUN docker-php-ext-install mysqli pdo_mysql mbstring exif pcntl pdo bcmath opcac
 RUN docker-php-ext-install gd
 
 # Downloading and installing Classroombookings
-RUN curl -LJO https://github.com/craigrodway/classroombookings/releases/download/v${CRBS_VERSION}/crbs-${CRBS_VERSION}.zip && \
+RUN curl -LJO https://api.github.com/repos/classroombookings/classroombookings/zipball/v${CRBS_VERSION} && \
+    mv classroombookings-classroombookings-v${CRBS_VERSION}* crbs-${CRBS_VERSION}.zip && \
     unzip crbs-${CRBS_VERSION}.zip && \
+    cp -r classroombookings*/. ./ && \
+    rm -r classroombookings* && \
     rm crbs-${CRBS_VERSION}.zip
 
 RUN chown www-data -R .

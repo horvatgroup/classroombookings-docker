@@ -8,7 +8,7 @@ services:
     volumes:
       - app:/var/www/html/
     ports:
-      - "8080:80"
+      - "8081:80"
     depends_on:
       - mariadb
   mariadb:
@@ -17,8 +17,8 @@ services:
     restart: unless-stopped
     expose:
       - 3306
-#    ports:
-#      - "3306:3306"
+    ports:
+      - "3306:3306"
     environment:
       MARIADB_ROOT_PASSWORD: securePassword123
       MARIADB_DATABASE: crbs_db
