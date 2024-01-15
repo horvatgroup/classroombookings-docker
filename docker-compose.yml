@@ -1,8 +1,14 @@
 version: '3.3'
 
+x-environment: &commonEnvironment
+  MARIADB_ROOT_PASSWORD: securePassword123
+  MARIADB_DATABASE: crbs_db
+  MARIADB_USER: crbs_user
+  MARIADB_PASSWORD: 6vTccw7zYF
+
 services:
   crbs:
-    build: ./
+    build: ./crbs
     container_name: crbs
     restart: unless-stopped
     volumes:
@@ -17,15 +23,15 @@ services:
     restart: unless-stopped
     expose:
       - 3306
-    ports:
-      - "3306:3306"
-    environment:
-      MARIADB_ROOT_PASSWORD: securePassword123
-      MARIADB_DATABASE: crbs_db
-      MARIADB_USER: crbs_user
-      MARIADB_PASSWORD: 6vTccw7zYF
+    environment: *commonEnvironment
     volumes:
       - db:/var/lib/mysql 
+  arch:
+    build: ./crbs-scripts
+    container_name: crbs-scripts
+    environment: *commonEnvironment
+    stdin_open: true
+    tty: true
 
 volumes:
   db:
