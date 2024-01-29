@@ -1,10 +1,4 @@
-version: '3.3'
-
-x-environment: &commonEnvironment
-  MARIADB_ROOT_PASSWORD: securePassword123
-  MARIADB_DATABASE: crbs_db
-  MARIADB_USER: crbs_user
-  MARIADB_PASSWORD: 6vTccw7zYF
+version: '2.2'
 
 services:
   crbs:
@@ -13,27 +7,30 @@ services:
     restart: unless-stopped
     volumes:
       - app:/var/www/html/
-    ports:
-      - "8081:80"
     depends_on:
       - mariadb
+    env_file:
+      - default.env
   mariadb:
     image: mariadb:10
     container_name: crbs-mariadb
     restart: unless-stopped
-    expose:
-      - 3306
-    ports:
-      - 3306:3306
-    environment: *commonEnvironment
+    env_file:
+      - default.env
     volumes:
       - db:/var/lib/mysql 
   arch:
     build: ./crbs-scripts
     container_name: crbs-scripts
-    environment: *commonEnvironment
+    env_file:
+      - default.env
     stdin_open: true
     tty: true
+
+networks:
+ default:
+  external:
+    name: letsencrypt
 
 volumes:
   db:
